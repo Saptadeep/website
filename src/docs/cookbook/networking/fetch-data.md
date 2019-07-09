@@ -64,9 +64,9 @@ convert the `http.Response` into a Dart object.
 
 ### Create a `Post` class
 
-First, create a `Post` class that contains the data from the
+First, create a `Get` class that contains the data from the
 network request. It includes a factory constructor that 
-creates a `Post` from JSON.
+creates a `Get` from JSON.
 
 Converting JSON by hand is only one option. For more information,
 see the full article on [JSON and
@@ -74,16 +74,16 @@ serialization](/docs/development/data-and-backend/json).
 
 <!-- skip -->
 ```dart
-class Post {
+class Get {
   final int userId;
   final int id;
   final String title;
   final String body;
 
-  Post({this.userId, this.id, this.title, this.body});
+  Get({this.userId, this.id, this.title, this.body});
 
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
+  factory Get.fromJson(Map<String, dynamic> json) {
+    return Get(
       userId: json['userId'],
       id: json['id'],
       title: json['title'],
@@ -93,34 +93,34 @@ class Post {
 }
 ```
 
-### Convert the `http.Response` to a `Post`
+### Convert the `http.Response` to a `Get`
 
-Now, use the following steps to update the `fetchPost()`
-function to return a `Future<Post>`:
+Now, use the following steps to update the `fetchGet()`
+function to return a `Future<Get>`:
 
   1. Convert the response body into a JSON `Map` with the `dart:convert`
      package.
   2. If the server returns an "OK" response with a status code of 200, convert
-     the JSON `Map` into a `Post` using the `fromJson()` factory method.
+     the JSON `Map` into a `Get` using the `fromJson()` factory method.
   3. If the server returns an unexpected response, throw an error.
 
 <!-- skip -->
 ```dart
-Future<Post> fetchPost() async {
+Future<Get> fetchGet() async {
   final response =
       await http.get('https://jsonplaceholder.typicode.com/posts/1');
 
   if (response.statusCode == 200) {
     // If server returns an OK response, parse the JSON.
-    return Post.fromJson(json.decode(response.body));
+    return Get.fromJson(json.decode(response.body));
   } else {
     // If that response was not OK, throw an error.
-    throw Exception('Failed to load post');
+    throw Exception('Failed to load Get');
   }
 }
 ```
 
-Hooray! Now you've got a function that fetches a post from the
+Hooray! Now you've got a function that fetches a get from the
 internet.
 
 ## 4. Fetch and display the data
@@ -133,14 +133,14 @@ to work with async data sources.
 You must provide two parameters:
 
   1. The `Future` you want to work with. In this case, call the
-     `fetchPost()` function.
+     `fetchGet()` function.
   2. A `builder` function that tells Flutter what to render, depending on the
      state of the `Future`: loading, success, or error.
 
 <!-- skip -->
 ```dart
-FutureBuilder<Post>(
-  future: fetchPost(),
+FutureBuilder<Get>(
+  future: fetchGet(),
   builder: (context, snapshot) {
     if (snapshot.hasData) {
       return Text(snapshot.data.title);
